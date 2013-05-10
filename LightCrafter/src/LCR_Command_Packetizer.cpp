@@ -10,13 +10,14 @@ Command_Packetizer::~Command_Packetizer(void)
 
 
 
-
 uint8* Command_Packetizer::CreateCommand(uint8 packetType, uint16 commandId, uint8 flags, uint16 payLoadLength, uint8* payLoad)
 {
-	uint8 * command = new uint8[HEADER_SIZE+MAX_PACKET_SIZE+CHECKSUM_SIZE]; 
+	int size = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
+	uint8 * command = new uint8[HEADER_SIZE+payLoadLength+CHECKSUM_SIZE]; 
 	InitilizeCommandBuffer(command, packetType,commandId,flags,payLoadLength);
 	LoadPayLoadInBuffer(command, payLoad, payLoadLength );
-
+	CalculateCheckSum(command,size);
+	
 	return command;
 
 }
@@ -24,6 +25,7 @@ uint8* Command_Packetizer::CreateCommand(uint8 packetType, uint16 commandId, uin
 
 void Command_Packetizer::InitilizeCommandBuffer(uint8* command, uint8 packetType, uint16 commandId, uint8 flags, uint16 payLoadLength)
 {
+
 	command[0] = packetType;
 	command[1] = (commandId >> 8) & 0xFF;
 	command[2] = commandId & 0xFF;
@@ -39,17 +41,18 @@ void Command_Packetizer::LoadPayLoadInBuffer(uint8 * command, uint8* payLoad, ui
 
 	for( int i =0; i< payLoadLength;i++)
 	{
-		memcpy ((void *) command[6+i],payLoad,sizeof(uint8));
+		command[6+i] = payLoad[i];
+		//memcpy ((void *) command[6+i],(void*)payLoad[i],sizeof(uint8));
 	}
 }	
 
-void Command_Packetizer::CalculateCheckSum(uint8* command, uint16 payLoadLength)
+void Command_Packetizer::CalculateCheckSum(uint8* command, uint16 size)
 {
     int sum = 0;
 
-    for(int i = 0; i < payLoadLength + HEADER_SIZE; i++)
+    for(int i = 0; i < size; i++)
     {
         sum += command[i];
     }
-	command[HEADER_SIZE +payLoadLength] = (uint8)(sum & 0xFF);
+	command[size] = (uint8)(sum & 0xFF);
 }

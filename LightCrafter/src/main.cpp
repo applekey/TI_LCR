@@ -5,8 +5,10 @@
 int main()
 {
 	LightCrafter lcr;
-	lcr.start();
-	//lcr.LCR_Component_Revision();
+	//lcr.start();
+	
 
+	lcr.ProjectImage(NULL);
 
+	return 0;
 }

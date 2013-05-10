@@ -3,15 +3,15 @@
 
 LightCrafter::LightCrafter(void)
 {
-	LCR_Commander lcr_commander;
-	Commander = &lcr_commander;
+	Commander = new LCR_Commander();
 	IsConnected = false;
 }
 
 
 LightCrafter::~LightCrafter(void)
 {
-
+	if(Commander != NULL)
+		delete Commander;
 }
 
 int LightCrafter::start()

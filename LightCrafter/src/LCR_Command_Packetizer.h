@@ -14,7 +14,7 @@ class Command_Packetizer
 private:
 	void InitilizeCommandBuffer(uint8* command, uint8 packetType, uint16 commandId, uint8 flags, uint16 payLoadLength);
 	void LoadPayLoadInBuffer (uint8 * command, uint8* payLoad, uint16 payLoadLength);
-	void CalculateCheckSum(uint8* command, uint16 payLoadLength);
+	void CalculateCheckSum(uint8* command, uint16 size);
 
 public:
 	Command_Packetizer(void);
