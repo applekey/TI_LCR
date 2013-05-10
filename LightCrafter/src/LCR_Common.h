@@ -65,8 +65,6 @@ typedef enum
 } Unified_Operation_Status;
 
 
-
-
 typedef enum
 {
 	VersionString = 0x0100,
@@ -115,7 +113,7 @@ typedef enum
 
 typedef enum
 {
-	StaticImage = 0x00,
+	StaticImageMode = 0x00,
 	InternalTestPatter = 0x01,
 	HdmiVideoInput = 0x02,
 	Reserved = 0x03,

@@ -56,8 +56,10 @@ LCR_Byte_Zero_Packet LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byte
 
 	LCR_Byte_Zero_Packet operationStatus;
 
-	int totalLength = HEADER_SIZE + payLoadLength + CHECKSUM_SIZE;
+	int totalLength = HEADER_SIZE + byteCount + CHECKSUM_SIZE;
 	int sendResult = tcpClient->TCP_Send(connectedSocket,command,totalLength);
+
+	//disconnect
 
 }
 
@@ -77,7 +79,10 @@ LCR_Byte_Zero_Packet LCR_Commander::SetDisplayMode(DisplayMode displayMode)
 	//flags
 	Command_Flags flag = DataComplete;
 
-	uint8 * payLoad = &((uint8)displayMode);
+	uint8 * payLoad;
+	payLoad = &((uint8)displayMode);
+
+	uint16 byteCount = 0x1;
 
 	//create the command
 	uint8* command = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, byteCount, payLoad);

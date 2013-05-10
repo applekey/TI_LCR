@@ -35,25 +35,37 @@ int LightCrafter::GetWidth(void)
 }
 
 
-bool LightCrafter::ProjectImage(cv::Mat image)
+bool LightCrafter::ProjectImage(uint8* image)
 {
 
-   // Check the image and make sure it is the right size
-  if( image.cols != GetWidth() || image.rows != GetHeight() )
-  {
-	cout << "Incorrect image specified. Check size and channel count\n";
-	return false;
-  }
+ //  // Check the image and make sure it is the right size
+ // if( image.cols != GetWidth() || image.rows != GetHeight() )
+ // {
+	//cout << "Incorrect image specified. Check size and channel count\n";
+	//return false;
+ // }
 
-  auto binaryImage = _Convert2BinaryImage( image );
-  auto byteCount = GetWidth() * GetHeight() / 8;
+ // auto binaryImage = _Convert2BinaryImage( image );
+ // auto byteCount = GetWidth() * GetHeight() / 8;
 
-  Commander ->LCR_LOAD_STATIC_IMAGE( binaryImage, byteCount);
+  //connect
+
+  Commander ->Connect_LCR(LCR_Default_IP,LCR_Default_PORT);
+
+  uint8* binaryImage = new uint8[4];
+  binaryImage[0] = 0x12;
+  binaryImage[1] = 0x34;
+  binaryImage[2] = 0x56;
+  binaryImage[3] = 0x78;
+
+
+  Commander ->LCR_LOAD_STATIC_IMAGE( binaryImage, 4);
   
-
-  DisplayMode staticImg = StaticImage;
+  DisplayMode staticImg = StaticImageMode;
   Commander ->SetDisplayMode(staticImg);
 
+  //disconnect
+  Commander ->Disconnect_LCR();
 
 
  /* if ( !_CheckLogError( DLP_Img_DownloadBitplanePatternToExtMem( binaryImage.get(), byteCount, 0 ) ) )
@@ -75,12 +87,6 @@ bool LightCrafter::ProjectImage(cv::Mat image)
   }*/
 
   return true;
-
-
-
-
-
-  return false;
 }
 
 //LCR_Byte_Zero_Packet LightCrafter::LCR_Component_Revision(LCR_Revision device, string* version)
