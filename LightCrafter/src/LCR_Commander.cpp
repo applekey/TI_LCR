@@ -35,6 +35,62 @@ int LCR_Commander:: Connect_LCR(string ipAddress, string port)
 	
 }
 
+LCR_Byte_Zero_Packet LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
+{
+	if(connectedSocket < 0)
+	{
+		// not connected
+	}
+
+	// read command
+	Packet_Type pType = Host_Write;
+
+	//commandId
+	CommandIds cmdId = StaticImage;
+
+	//flags
+	Command_Flags flag = DataComplete;
+
+	//create the command
+	uint8* command = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, byteCount, image);
+
+	LCR_Byte_Zero_Packet operationStatus;
+
+	int totalLength = HEADER_SIZE + payLoadLength + CHECKSUM_SIZE;
+	int sendResult = tcpClient->TCP_Send(connectedSocket,command,totalLength);
+
+}
+
+LCR_Byte_Zero_Packet LCR_Commander::SetDisplayMode(DisplayMode displayMode)
+{
+	if(connectedSocket < 0)
+	{
+		// not connected
+	}
+
+	// read command
+	Packet_Type pType = Host_Write;
+
+	//commandId
+	CommandIds cmdId = CurrentDisplayMode;
+
+	//flags
+	Command_Flags flag = DataComplete;
+
+	uint8 * payLoad = &((uint8)displayMode);
+
+	//create the command
+	uint8* command = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, byteCount, payLoad);
+
+	LCR_Byte_Zero_Packet operationStatus;
+
+	int totalLength = HEADER_SIZE + payLoadLength + CHECKSUM_SIZE;
+	int sendResult = tcpClient->TCP_Send(connectedSocket,command,totalLength);
+
+
+}
+
+
 LCR_Byte_Zero_Packet LCR_Commander::LCR_Component_Revision(LCR_Revision device, string* version)
 {
 	if(connectedSocket < 0)

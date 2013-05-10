@@ -24,15 +24,74 @@ void LightCrafter::stop(void)
 	Commander ->Disconnect_LCR();
 }
 
-LCR_Byte_Zero_Packet LightCrafter::LCR_Component_Revision(LCR_Revision device, string* version)
+int LightCrafter::GetHeight(void)
 {
-	if(IsConnected)
-		Commander -> LCR_Component_Revision(device, version);
-	// initlize the command
-
-	//send the command
-
-	//recieve the response
-	LCR_Byte_Zero_Packet response = Success;
-	return response;
+  return 608;
 }
+
+int LightCrafter::GetWidth(void)
+{
+  return 684;
+}
+
+
+bool LightCrafter::ProjectImage(cv::Mat image)
+{
+
+   // Check the image and make sure it is the right size
+  if( image.cols != GetWidth() || image.rows != GetHeight() )
+  {
+	cout << "Incorrect image specified. Check size and channel count\n";
+	return false;
+  }
+
+  auto binaryImage = _Convert2BinaryImage( image );
+  auto byteCount = GetWidth() * GetHeight() / 8;
+
+  Commander ->LCR_LOAD_STATIC_IMAGE( binaryImage, byteCount);
+  
+
+  DisplayMode staticImg = StaticImage;
+  Commander ->SetDisplayMode(staticImg);
+
+
+
+ /* if ( !_CheckLogError( DLP_Img_DownloadBitplanePatternToExtMem( binaryImage.get(), byteCount, 0 ) ) )
+  {
+	cout << "Unable to transfer images to the projector\n";
+	return false;
+  }
+
+  if( !_CheckLogError( DLP_Display_DisplayPatternManualForceFirstPattern( ) ) )
+  {
+	cout << "Unable to display the first pattern\n";
+	return false;
+  }
+
+  if( !_CheckLogError( DLP_Display_DisplayPatternAutoStepRepeatForMultiplePasses( ) ) )
+  {
+	cout << "Unable to project pattern\n";
+	return false;
+  }*/
+
+  return true;
+
+
+
+
+
+  return false;
+}
+
+//LCR_Byte_Zero_Packet LightCrafter::LCR_Component_Revision(LCR_Revision device, string* version)
+//{
+//	if(IsConnected)
+//		Commander -> LCR_Component_Revision(device, version);
+//	// initlize the command
+//
+//	//send the command
+//
+//	//recieve the response
+//	LCR_Byte_Zero_Packet response = Success;
+//	return response;
+//}

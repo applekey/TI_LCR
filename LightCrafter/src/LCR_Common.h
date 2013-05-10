@@ -113,4 +113,14 @@ typedef enum
 }Command_Flags;
 
 
+typedef enum
+{
+	StaticImage = 0x00,
+	InternalTestPatter = 0x01,
+	HdmiVideoInput = 0x02,
+	Reserved = 0x03,
+	PatternSequenceDisplay = 0x04
+
+} DisplayMode;
+
 #endif

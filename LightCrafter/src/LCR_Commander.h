@@ -26,6 +26,10 @@ public:
 
 	LCR_Byte_Zero_Packet LCR_Component_Revision(LCR_Revision device, string* version);
 
+	LCR_Byte_Zero_Packet SetDisplayMode(DisplayMode displayMode);
+
+	LCR_Byte_Zero_Packet LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount);
+
 };
 
 
