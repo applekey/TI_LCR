@@ -42,7 +42,7 @@ void Command_Packetizer::LoadPayLoadInBuffer(uint8 * command, uint8* payLoad, ui
 	for( int i =0; i< payLoadLength;i++)
 	{
 		command[6+i] = payLoad[i];
-		//memcpy ((void *) command[6+i],(void*)payLoad[i],sizeof(uint8));
+		//memcpy ((void *) command[6],(void*)payLoad,payLoadLength);
 	}
 }	
 

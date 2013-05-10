@@ -8,6 +8,8 @@ using namespace std;
 #include "LCR_Common.h"
 #include "LCR_Command_Packetizer.h"
 
+#include <iostream>
+
 
 #define ConnectionAttempts 5
 
@@ -21,14 +23,14 @@ public:
 	LCR_Commander(void);
 	~LCR_Commander(void);
 
-	int Connect_LCR(string ipAddress, string port);
-	void Disconnect_LCR(void);
+	bool Connect_LCR(string ipAddress, string port);
+	bool Disconnect_LCR(void);
 
-	LCR_Byte_Zero_Packet LCR_Component_Revision(LCR_Revision device, string* version);
+	//LCR_Byte_Zero_Packet LCR_Component_Revision(LCR_Revision device, string* version);
 
-	LCR_Byte_Zero_Packet SetDisplayMode(DisplayMode displayMode);
+	bool SetDisplayMode(DisplayMode displayMode);
 
-	LCR_Byte_Zero_Packet LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount);
+	bool LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount);
 
 };
 
