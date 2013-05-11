@@ -7,30 +7,21 @@ LightCrafter::LightCrafter(void)
 	IsConnected = false;
 }
 
-
 LightCrafter::~LightCrafter(void)
 {
 	if(Commander != NULL)
 		delete Commander;
 }
 
-//int LightCrafter::start()
-//{
-//	return Commander->Connect_LCR(LCR_Default_IP,LCR_Default_PORT);
-//}
-//
-//void LightCrafter::stop(void)
-//{
-//	Commander ->Disconnect_LCR();
-//}
-
 int LightCrafter::GetHeight(void)
 {
+  //static image has to be a bmp at 608 x 684
   return 608;
 }
 
 int LightCrafter::GetWidth(void)
 {
+  //static image has to be a bmp at 608 x 684
   return 684;
 }
 
@@ -79,25 +70,6 @@ bool LightCrafter::ProjectImage(cv::Mat image)
 	  return false;
   }
 
-
- /* if ( !_CheckLogError( DLP_Img_DownloadBitplanePatternToExtMem( binaryImage.get(), byteCount, 0 ) ) )
-  {
-	cout << "Unable to transfer images to the projector\n";
-	return false;
-  }
-
-  if( !_CheckLogError( DLP_Display_DisplayPatternManualForceFirstPattern( ) ) )
-  {
-	cout << "Unable to display the first pattern\n";
-	return false;
-  }
-
-  if( !_CheckLogError( DLP_Display_DisplayPatternAutoStepRepeatForMultiplePasses( ) ) )
-  {
-	cout << "Unable to project pattern\n";
-	return false;
-  }*/
-
   return true;
 }
 
@@ -135,15 +107,3 @@ unique_ptr<uint8[]> LightCrafter::_Convert2BinaryImage(cv::Mat byteImage)
 }
 
 
-//LCR_Byte_Zero_Packet LightCrafter::LCR_Component_Revision(LCR_Revision device, string* version)
-//{
-//	if(IsConnected)
-//		Commander -> LCR_Component_Revision(device, version);
-//	// initlize the command
-//
-//	//send the command
-//
-//	//recieve the response
-//	LCR_Byte_Zero_Packet response = Success;
-//	return response;
-//}

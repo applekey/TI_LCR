@@ -11,4 +11,4 @@ public:
 	virtual int GetHeight() = 0;
 };
 
-#endif //PROJECTOR_I_PROJECTOR_H_
+#endif

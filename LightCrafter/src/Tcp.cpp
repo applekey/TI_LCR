@@ -3,10 +3,6 @@
 
 int Tcp::TCP_Connect(string host, string port)
 {
-
-	
-
-
    // create WSADATA object
     WSADATA wsaData;
 

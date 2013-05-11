@@ -39,30 +39,7 @@ typedef enum
 
 } Packet_Type;
 
-typedef enum
-{
-	U_LCR_System_Busy = 0x0000,
-	//error
-	U_LCR_Error_Success = 0x0100,
-	U_LCR_Error_UnknownError = 0x0101,
-	U_LCR_Error_InvalidCommand = 0x0102,
-	U_LCR_Error_InvalidParameter = 0x0103,
-	U_LCR_Error_OutofMemory = 0x0104,	
-	U_LCR_Error_HardwareFailure = 0x0105,
-	U_LCR_Error_HardwareBusy = 0x0106,
-	U_LCR_Error_NotInitlized = 0x0107,
-	U_LCR_Error_ReferenceError = 0x0108,
-	U_LCR_Error_CheckSumError = 0x0109,
-	U_LCR_Error_PacketFormatError= 0x010A,
-	U_LCR_Error_CommandContinuation = 0x010B,
 
-	U_Host_Write = 0x0200,
-	U_LCR_Write_Response = 0x0300,
-	U_Host_Read_Command = 0x0400,
-	U_LCR_ReponsePacket = 0x0500
-
-
-} Unified_Operation_Status;
 
 
 typedef enum

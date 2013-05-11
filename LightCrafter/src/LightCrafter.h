@@ -12,13 +12,9 @@ using namespace std;
 
 
 
-//#define LCR_Default_IP			"192.168.1.100"
-//#define LCR_Default_PORT		"21845"
+#define LCR_Default_IP			"192.168.1.100"
+#define LCR_Default_PORT		"21845"
 
-//testing purposes 
-
-#define LCR_Default_IP			"127.0.0.1"
-#define LCR_Default_PORT		"1234"
 
 class LightCrafter: public IProjector
 {
@@ -35,10 +31,6 @@ public:
 	LightCrafter(void);
 	~LightCrafter(void);
 
-	//int start();
-	//void stop();
-
-	//upload a static image, static image has to be a bmp at 608 x 684
 	bool ProjectImage(cv::Mat image);
 
 	int LightCrafter::GetHeight(void);

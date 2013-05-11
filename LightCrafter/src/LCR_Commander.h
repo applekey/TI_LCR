@@ -27,8 +27,6 @@ public:
 	bool Connect_LCR(string ipAddress, string port);
 	bool Disconnect_LCR(void);
 
-	//LCR_Byte_Zero_Packet LCR_Component_Revision(LCR_Revision device, string* version);
-
 	bool SetDisplayMode(DisplayMode displayMode);
 
 	bool LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount);
