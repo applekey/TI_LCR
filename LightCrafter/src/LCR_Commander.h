@@ -8,12 +8,13 @@ using namespace std;
 #include "LCR_Common.h"
 #include "LCR_Command_Packetizer.h"
 
+
 #include <iostream>
 
 
 #define ConnectionAttempts 5
 
-class LCR_Commander
+class LCR_Commander 
 {
 private:
 	Tcp * tcpClient;
