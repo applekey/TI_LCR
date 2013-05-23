@@ -16,10 +16,9 @@ int main()
 	
 
 	cv::Mat image;
-	image = cv::imread("C:\\Users\\linda\\Desktop\\ab.jpg", CV_LOAD_IMAGE_COLOR);
-	imshow("Image", image);
-	lcr.ProjectImage(image);
-
-
+	image = cv::imread("C:\\Users\\song\\Desktop\\rsz_lightcrafter_canada_converted.bmp", CV_LOAD_IMAGE_COLOR);
+	//imshow("Image", image);
+    lcr.ProjectImage(image);
+	
 	return 0;
 }

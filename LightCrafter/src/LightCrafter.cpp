@@ -16,13 +16,13 @@ LightCrafter::~LightCrafter(void)
 int LightCrafter::GetHeight(void)
 {
   //static image has to be a bmp at 608 x 684
-  return 608;
+  return 684;
 }
 
 int LightCrafter::GetWidth(void)
 {
   //static image has to be a bmp at 608 x 684
-  return 684;
+  return 608;
 }
 
 
@@ -52,11 +52,12 @@ bool LightCrafter::ProjectImage(cv::Mat image)
 	  Commander ->Disconnect_LCR();
 	  return false;
   }
-  
+ 
   DisplayMode staticImg = StaticImageMode;
   
-  operation = Commander -> SetDisplayMode(staticImg);
-   if(!operation)
+  bool operation2;
+  operation2 = Commander -> SetDisplayMode(staticImg);
+   if(!operation2)
   {
 	  Commander ->Disconnect_LCR();
 	  return false;
