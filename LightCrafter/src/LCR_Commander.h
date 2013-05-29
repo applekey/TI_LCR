@@ -3,6 +3,9 @@
 
 using namespace std;
 #include <string>
+#include <cmath>
+#include <stdio.h>
+#include <math.h>
 
 #include "Tcp.h"
 #include "LCR_Common.h"
@@ -31,6 +34,7 @@ public:
 
 	bool LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount);
 
+	bool RecieveSuccessful(uint8* recieveBuffer);
 };
 
 

@@ -8,7 +8,9 @@ typedef unsigned __int8 uint8;
 
 #define HEADER_SIZE			6
 #define MAX_PACKET_SIZE		0xFFFF
+#define MAX_PAYLOAD_SIZE    0xFFF8
 #define CHECKSUM_SIZE		1
+
 
 
 typedef enum 

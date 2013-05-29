@@ -2,6 +2,8 @@
 #define PROJECTOR_I_PROJECTOR_H_
 
 #include <cv.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 class IProjector
 {

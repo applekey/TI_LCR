@@ -26,19 +26,36 @@ int LightCrafter::GetWidth(void)
 }
 
 
-bool LightCrafter::ProjectImage(cv::Mat image)
+bool LightCrafter::ProjectImage(string imageLocation)
 {
-
-   // Check the image and make sure it is the right size
-  if( image.cols != GetWidth() || image.rows != GetHeight() )
+  FILE *fp;
+  fp = fopen(imageLocation.c_str(), "rb");
+  
+  if(fp == NULL)
   {
-	cout << "Incorrect image specified. Check size and channel count\n";
-	return false;
+      return -1;
   }
 
-  auto binaryImage = _Convert2BinaryImage( image );
-  auto byteCount = GetWidth() * GetHeight() / 8;
+  fseek (fp , 0 , SEEK_END);
+  long  lSize = ftell (fp);
+  rewind (fp);
 
+  
+
+  uint8* imageBuffer = (uint8*) malloc (sizeof(uint8)*lSize);
+   int result = fread (imageBuffer,1,lSize,fp);
+   fclose(fp);
+ //  // Check the image and make sure it is the right size
+ // if( image.cols != GetWidth() || image.rows != GetHeight() )
+ // {
+	//cout << "Incorrect image specified. Check size and channel count\n";
+	//return false;
+ // }
+
+ // //auto binaryImage = _Convert2BinaryImage( image );
+ // auto byteCount = GetWidth() * GetHeight()*24 / 8;
+
+  
   //connect
 
   bool connection = Commander ->Connect_LCR(LCR_Default_IP,LCR_Default_PORT);
@@ -46,22 +63,27 @@ bool LightCrafter::ProjectImage(cv::Mat image)
   if(!connection)
 	  return false;
 
-  bool operation  = Commander ->LCR_LOAD_STATIC_IMAGE( binaryImage.get(), byteCount);
-  if(!operation)
-  {
-	  Commander ->Disconnect_LCR();
-	  return false;
-  }
- 
-  DisplayMode staticImg = StaticImageMode;
+
+
+
+   DisplayMode staticImg = StaticImageMode;
   
-  bool operation2;
+ /* bool operation2;
   operation2 = Commander -> SetDisplayMode(staticImg);
    if(!operation2)
   {
 	  Commander ->Disconnect_LCR();
 	  return false;
   }
+  */
+   bool operation  = Commander ->LCR_LOAD_STATIC_IMAGE( imageBuffer, lSize);
+  if(!operation)
+  {
+	  Commander ->Disconnect_LCR();
+	  return false;
+  }
+ 
+
   
    //disconnect
   bool disconnect = Commander ->Disconnect_LCR();

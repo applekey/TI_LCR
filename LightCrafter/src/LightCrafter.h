@@ -2,7 +2,8 @@
 #define _LIGHTCRAFTER_H_
 
 using namespace std;
-//#include <cv.h> 
+
+
 #include <string>
 #include "LCR_Commander.h"
 #include "LCR_Common.h"
@@ -12,11 +13,11 @@ using namespace std;
 
 
 
-#define LCR_Default_IP			"192.168.1.100"
+#define LCR_Default_IP			"192.168.1.100" //"127.0.0.1"//"192.168.1.100"
 #define LCR_Default_PORT		"21845"
 
 
-class LightCrafter: public IProjector
+class LightCrafter//: public IProjector
 {
 private:
 	bool IsConnected;
@@ -31,7 +32,7 @@ public:
 	LightCrafter(void);
 	~LightCrafter(void);
 
-	bool ProjectImage(cv::Mat image);
+	bool ProjectImage(string imageLocation);
 
 	int LightCrafter::GetHeight(void);
 

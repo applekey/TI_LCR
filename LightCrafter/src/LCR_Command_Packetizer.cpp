@@ -2,7 +2,7 @@
 
 Command_Packetizer::Command_Packetizer(void)
 {
-}
+} 
 
 Command_Packetizer::~Command_Packetizer(void)
 {
@@ -26,6 +26,8 @@ uint8* Command_Packetizer::CreateCommand(uint8 packetType, uint16 commandId, uin
 void Command_Packetizer::InitilizeCommandBuffer(uint8* command, uint8 packetType, uint16 commandId, uint8 flags, uint16 payLoadLength)
 {
 
+    //payLoadLength = payLoadLength + 6;
+    
 	command[0] = packetType;
 	command[1] = (commandId >> 8) & 0xFF;
 	command[2] = commandId & 0xFF;
@@ -41,9 +43,13 @@ void Command_Packetizer::LoadPayLoadInBuffer(uint8 * command, uint8* payLoad, ui
 
 	for( int i =0; i< payLoadLength;i++)
 	{
+	   
+	     
 		command[6+i] = payLoad[i];
 		//memcpy ((void *) command[6],(void*)payLoad,payLoadLength);
 	}
+
+	
 }	
 
 void Command_Packetizer::CalculateCheckSum(uint8* command, uint16 size)
