@@ -10,7 +10,7 @@ Command_Packetizer::~Command_Packetizer(void)
 
 
 
-uint8* Command_Packetizer::CreateCommand(uint8 packetType, uint16 commandId, uint8 flags, uint16 payLoadLength, uint8* payLoad)
+uint8* Command_Packetizer::CreateCommand(uint8 packetType, uint16 commandId, uint8 flags, long payLoadLength, uint8* payLoad)
 {
 	int size = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
 	uint8 * command = new uint8[size]; 
@@ -23,7 +23,7 @@ uint8* Command_Packetizer::CreateCommand(uint8 packetType, uint16 commandId, uin
 }
 
 
-void Command_Packetizer::InitilizeCommandBuffer(uint8* command, uint8 packetType, uint16 commandId, uint8 flags, uint16 payLoadLength)
+void Command_Packetizer::InitilizeCommandBuffer(uint8* command, uint8 packetType, uint16 commandId, uint8 flags, long payLoadLength)
 {
 
     //payLoadLength = payLoadLength + 6;
@@ -36,7 +36,7 @@ void Command_Packetizer::InitilizeCommandBuffer(uint8* command, uint8 packetType
 	command[5] = (payLoadLength >> 8) & 0xFF;
 }
 
-void Command_Packetizer::LoadPayLoadInBuffer(uint8 * command, uint8* payLoad, uint16 payLoadLength)
+void Command_Packetizer::LoadPayLoadInBuffer(uint8 * command, uint8* payLoad, long payLoadLength)
 {
 	if(command == NULL)
 		return;
@@ -52,7 +52,7 @@ void Command_Packetizer::LoadPayLoadInBuffer(uint8 * command, uint8* payLoad, ui
 	
 }	
 
-void Command_Packetizer::CalculateCheckSum(uint8* command, uint16 size)
+void Command_Packetizer::CalculateCheckSum(uint8* command, long size)
 {
     int sum = 0;
 

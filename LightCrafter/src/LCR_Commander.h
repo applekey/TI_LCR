@@ -33,8 +33,6 @@ public:
 	bool SetDisplayMode(DisplayMode displayMode);
 
 	bool LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount);
-
-	bool RecieveSuccessful(uint8* recieveBuffer);
 };
 
 

@@ -32,7 +32,7 @@ public:
 	LightCrafter(void);
 	~LightCrafter(void);
 
-	bool ProjectImage(string imageLocation);
+	bool ProjectImage(cv::Mat image);
 
 	int LightCrafter::GetHeight(void);
 

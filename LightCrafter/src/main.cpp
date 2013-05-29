@@ -16,10 +16,11 @@ int main()
 	
 
 	cv::Mat image;
-	//image = cv::imread("C:\\Users\\song\\Desktop\\convertedBMP\\a.bmp", CV_LOAD_IMAGE_COLOR);
+	image = cv::imread("C:\\Users\\song\\Desktop\\convertedBMP\\a.bmp", CV_LOAD_IMAGE_COLOR);
 	//imshow("Image", image);
-    lcr.ProjectImage("C:\\Users\\song\\Desktop\\convertedBMP\\b.bmp");
-	//lcr.ProjectImage("C:\\Users\\song\\Desktop\\convertedBMP\\a.bmp");
+    lcr.ProjectImage(image);
+	
+	//lcr.ProjectImage("C:\\Users\\song\\Desktop\\convertedBMP\\b.bmp");
 	//lcr.ProjectImage("C:\\Users\\song\\Desktop\\convertedBMP\\b.bmp");
 	
 	return 0;

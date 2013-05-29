@@ -86,7 +86,7 @@ int Tcp::TCP_Send(int sock, unsigned char *buffer, int length)
 int Tcp::TCP_Receive(int sock, unsigned char *buffer, int length)
 {
     //Retrieve 'length' number of bytes into 'buffer' from the socket <sock> address
-     return recv(sock, (char*) buffer, length, 0); 
+  return recv(sock, (char*) buffer, length, 0); 
 }
 
 int Tcp::TCP_Disconnect(int sock)
