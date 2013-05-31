@@ -53,21 +53,28 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 
 	//send the first Packet
 	int headerSend = tcpClient->TCP_Send(connectedSocket,commandHeader,MAX_PACKET_SIZE);
+	//delete[] commandHeader;
 	delete[] commandHeader;
-	
 	if(headerSend ==SOCKET_ERROR)
 	{
 		cout <<"Static Image Load, First Packet send error.\n";
-		delete[] commandHeader;
+		
 		return false;
 	}
-	Sleep(300);
+	//Sleep(300);
+
+	//uint8* recieve = new uint8[8];
+	//tcpClient->TCP_Receive(connectedSocket,recieve,7);
+
+	// if(recieve[0]!=3)
+	//	int i =0;
+	//delete[]recieve;
 
 	//-------------Intermediate Packets---------------------------------------------
 	flag = Intermediate; // change the flag to intermediate
-	
-	int NumberOfIntermediatePackets = byteCount/MAX_PAYLOAD_SIZE+1 -2;
-	
+
+	int NumberOfIntermediatePackets = 18;
+
 	for(int i = 0;i<NumberOfIntermediatePackets;i++)
 	{
 	  uint8* commandIntermediate = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, MAX_PAYLOAD_SIZE, image+(MAX_PAYLOAD_SIZE)*(i+1));
@@ -80,21 +87,30 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 		cout <<"Static Image Load, the intermediate packet:"<<i<<"has a send error.\n";
 		return false;
 	  }
-	  Sleep(300);
+	  //Sleep(300);
+
+	 /* uint8* recieveI = new uint8[8];
+	  tcpClient->TCP_Receive(connectedSocket,recieveI,7);
+	  if(recieveI[0]!=3)
+		int i =0;
+
+
+	  delete[]recieveI;*/
+	  
 	}
 
 
 	//-------------Final Packet---------------------------------------------
 
 	flag = End; // change the flag to indicate last packet
-	
+
 	int remainingBytes = -(byteCount - ((MAX_PAYLOAD_SIZE)*(NumberOfIntermediatePackets+2)));
 
 	uint8* commandFinal = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, remainingBytes, image+MAX_PAYLOAD_SIZE*NumberOfIntermediatePackets);
 
 	int finalSend = tcpClient->TCP_Send(connectedSocket,commandFinal,remainingBytes+HEADER_SIZE+CHECKSUM_SIZE); 
 	 //finalSend = tcpClient->TCP_Send(connectedSocket,commandFinal,remainingBytes+HEADER_SIZE+CHECKSUM_SIZE); 
-	
+
 	delete[] commandFinal;
 
 	if(finalSend == SOCKET_ERROR)
@@ -102,6 +118,15 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 	  cout <<"Static Image Load, Final Packet send error.\n";
 	  return false;
 	}
+
+	/*uint8* recieveF = new uint8[8];
+	tcpClient->TCP_Receive(connectedSocket,recieveF,7);
+
+	 if(recieveF[0]!=3)
+		int i =0;
+
+	delete[]recieveF;*/
+	
 
 	return true;
 }
@@ -137,7 +162,7 @@ bool LCR_Commander::SetDisplayMode(DisplayMode displayMode)
 	if(sendResult ==SOCKET_ERROR)
 	{
 		cout <<"LCR Set Display mode send has send error.\n";
-		
+
 		return false;
 	}
 
@@ -149,20 +174,18 @@ bool LCR_Commander::Disconnect_LCR(void)
 	if(connectedSocket >0)
 	{
 		int status = tcpClient->TCP_Disconnect(connectedSocket);
-		
+
 		if(status == 0)
 		{
 		  connectedSocket = -1;
 		  return true;
 		}
-		 
+
 		else
 		  return false;
 	}
 	else
 	  return false;
-	
+
 
 }
-
-

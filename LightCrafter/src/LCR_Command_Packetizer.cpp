@@ -13,7 +13,7 @@ Command_Packetizer::~Command_Packetizer(void)
 uint8* Command_Packetizer::CreateCommand(uint8 packetType, uint16 commandId, uint8 flags, long payLoadLength, uint8* payLoad)
 {
 	int size = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
-	uint8 * command = new uint8[size]; 
+	uint8 * command = (uint8*)new unsigned char[size]; 
 	InitilizeCommandBuffer(command, packetType,commandId,flags,payLoadLength);
 	LoadPayLoadInBuffer(command, payLoad, payLoadLength );
 	CalculateCheckSum(command,size-1);

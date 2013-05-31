@@ -66,7 +66,7 @@ bool LightCrafter::ProjectImage(cv::Mat image)
 	  
 	DisplayMode staticImg = StaticImageMode;
 	bool modeChanged = Commander -> SetDisplayMode(staticImg);
-
+	
 	if(!modeChanged)
 	{
 	  cout<<"Could not change display mode to Static.\n";

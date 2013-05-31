@@ -23,10 +23,15 @@ int main()
 	LightCrafter lcr;
 	lcr.Connect();
 	lcr.ProjectImage(image1);
+
 	lcr.ProjectImage(image2);
+
 	lcr.ProjectImage(image1);
+
 	lcr.ProjectImage(image2);
+
 	lcr.ProjectImage(image1);
+
 	lcr.ProjectImage(image2);
 	lcr.Disconnect();
 	return 0;
