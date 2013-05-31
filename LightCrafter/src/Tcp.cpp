@@ -77,10 +77,9 @@ int Tcp::TCP_Send(int sock, unsigned char *buffer, int length)
 {
     // Send 'length' number of bytes from buffer via provided
     // socket <sock> address
-   return send(sock, (char *)buffer, length, 0);
-
-   //return 0;
-
+   
+  
+  return send(sock, (char *)buffer, length, 0);
 }
 
 int Tcp::TCP_Receive(int sock, unsigned char *buffer, int length)

@@ -5,23 +5,29 @@
 #include <iostream>
 
 #include "LightCrafter.h"
+#include "BitmapCreator.h"
 
 using namespace std;
 using namespace cv;
 
 int main()
 {
-	LightCrafter lcr;
-	//lcr.start();
-	
 
-	cv::Mat image;
-	image = cv::imread("C:\\Users\\song\\Desktop\\convertedBMP\\a.bmp", CV_LOAD_IMAGE_COLOR);
-	//imshow("Image", image);
-    lcr.ProjectImage(image);
-	
-	//lcr.ProjectImage("C:\\Users\\song\\Desktop\\convertedBMP\\b.bmp");
-	//lcr.ProjectImage("C:\\Users\\song\\Desktop\\convertedBMP\\b.bmp");
-	
+	cv::Mat image1;
+	image1 = cv::imread("C:\\Users\\song\\Desktop\\convertedBMP\\b.bmp", CV_LOAD_IMAGE_UNCHANGED );
+
+	cv::Mat image2;
+	image2 = cv::imread("C:\\Users\\song\\Desktop\\convertedBMP\\a.bmp", CV_LOAD_IMAGE_UNCHANGED );
+
+
+	LightCrafter lcr;
+	lcr.Connect();
+	lcr.ProjectImage(image1);
+	lcr.ProjectImage(image2);
+	lcr.ProjectImage(image1);
+	lcr.ProjectImage(image2);
+	lcr.ProjectImage(image1);
+	lcr.ProjectImage(image2);
+	lcr.Disconnect();
 	return 0;
 }

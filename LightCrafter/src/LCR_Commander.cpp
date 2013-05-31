@@ -39,7 +39,7 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 {
 	if(connectedSocket < 0)
 	{
-		cout << "No connected Socket.";
+		cout << "No connected Socket.\n";
 		return false;
 	}
 
@@ -57,10 +57,11 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 	
 	if(headerSend ==SOCKET_ERROR)
 	{
-		cout <<"Static Image Load, First Packet send error.";
+		cout <<"Static Image Load, First Packet send error.\n";
 		delete[] commandHeader;
 		return false;
 	}
+	Sleep(300);
 
 	//-------------Intermediate Packets---------------------------------------------
 	flag = Intermediate; // change the flag to intermediate
@@ -76,9 +77,10 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 
 	  if(intermediateSend == SOCKET_ERROR)
 	  {
-		cout <<"Static Image Load, the intermediate packet:"<<i<<"has a send error.";
+		cout <<"Static Image Load, the intermediate packet:"<<i<<"has a send error.\n";
 		return false;
 	  }
+	  Sleep(300);
 	}
 
 
@@ -90,14 +92,14 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 
 	uint8* commandFinal = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, remainingBytes, image+MAX_PAYLOAD_SIZE*NumberOfIntermediatePackets);
 
-	int finalSend = tcpClient->TCP_Send(connectedSocket,commandFinal,remainingBytes); 
-	finalSend = tcpClient->TCP_Send(connectedSocket,commandFinal,remainingBytes); 
-
+	int finalSend = tcpClient->TCP_Send(connectedSocket,commandFinal,remainingBytes+HEADER_SIZE+CHECKSUM_SIZE); 
+	 //finalSend = tcpClient->TCP_Send(connectedSocket,commandFinal,remainingBytes+HEADER_SIZE+CHECKSUM_SIZE); 
+	
 	delete[] commandFinal;
 
 	if(finalSend == SOCKET_ERROR)
 	{
-	  cout <<"Static Image Load, Final Packet send error.";
+	  cout <<"Static Image Load, Final Packet send error.\n";
 	  return false;
 	}
 
@@ -108,7 +110,7 @@ bool LCR_Commander::SetDisplayMode(DisplayMode displayMode)
 {
 	if(connectedSocket < 0)
 	{
-      cout << "No connected Socket.";
+      cout << "No connected Socket.\n";
 	  return false;
 	}
 
@@ -134,7 +136,7 @@ bool LCR_Commander::SetDisplayMode(DisplayMode displayMode)
 
 	if(sendResult ==SOCKET_ERROR)
 	{
-		cout <<"LCR Set Display mode send has send error.";
+		cout <<"LCR Set Display mode send has send error.\n";
 		
 		return false;
 	}

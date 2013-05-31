@@ -3,13 +3,13 @@
 
 using namespace std;
 
-
+#include <iostream>
 #include <string>
+
 #include "LCR_Commander.h"
 #include "LCR_Common.h"
-#include <iostream>
-
 #include "IProjector.h"
+#include "BitmapCreator.h"
 
 
 
@@ -31,6 +31,9 @@ private:
 public:
 	LightCrafter(void);
 	~LightCrafter(void);
+
+	void Connect();
+	void Disconnect();
 
 	bool ProjectImage(cv::Mat image);
 

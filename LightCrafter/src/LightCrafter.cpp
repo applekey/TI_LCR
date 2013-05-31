@@ -25,153 +25,82 @@ int LightCrafter::GetWidth(void)
   return 608;
 }
 
-
-bool LightCrafter::ProjectImage(cv::Mat image)
+void LightCrafter::Connect()
 {
-
-	bool connected = Commander ->Connect_LCR(LCR_Default_IP,LCR_Default_PORT);
+   bool connected = Commander ->Connect_LCR(LCR_Default_IP,LCR_Default_PORT);
 
 	if(!connected)
 	{
-	  cout<<"Cannot Connect to LCR.";
-	  return false;
+	  cout<<"Cannot Connect to LCR.\n";
+	  //return false;
 	}
 	else
 	{
-	  cout<<"Connected To LCR.";
+	  cout<<"Connected To LCR.\n";
 	  IsConnected = true;
 	}
-	  
+}
+
+void LightCrafter::Disconnect()
+{
+ bool disconnected = Commander ->Disconnect_LCR();
+
+	if(!disconnected)
+	{
+	  cout<< "Could not disconnect from the LCR.\n";
+	  //return false;
+	}
+	else
+	{
+	  cout<<"Disconnected from LCR.\n";
+	  IsConnected = false;
+	}
+}
+
+
+bool LightCrafter::ProjectImage(cv::Mat image)
+{
+    CvMat* imageStream =  BitmapCreator::CreateBitmapFromMat(image);
+
 	
-
-
+	  
 	DisplayMode staticImg = StaticImageMode;
 	bool modeChanged = Commander -> SetDisplayMode(staticImg);
 
 	if(!modeChanged)
 	{
-	  cout<<"Could not change display mode to Static.";
+	  cout<<"Could not change display mode to Static.\n";
 	  return false;
 	}
 	else
-	  cout<<"Mode changed to Static Display.";
+	  cout<<"Mode changed to Static Display.\n";
 
+	Sleep(300);
 
-	bool imageLoaded  = Commander ->LCR_LOAD_STATIC_IMAGE( image.data, size);
+	bool imageLoaded  = Commander ->LCR_LOAD_STATIC_IMAGE( imageStream->data.ptr, imageStream->step);
 
 	if(!imageLoaded)
 	{
-	  cout<<"Could not load static 608 x 684 24bit static bmp.";
+	  cout<<"Could not load static 608 x 684 24bit static bmp.\n";
 	  return false;
 	}
 	else
-	  cout<<"Static Image Loaded.";
+	  cout<<"Static Image Loaded.\n";
 
-	bool disconnected = Commander ->Disconnect_LCR();
+	/* Sleep(300);
+	 staticImg = InternalTestPatter;
+	 modeChanged = Commander -> SetDisplayMode(staticImg);
 
-	if(!disconnected)
-	{
-	  cout<< "Could not disconnect from the LCR.";
-	  return false;
-	}
-	else
-	{
-	  cout<<"Disconnected from LCR.";
-	  IsConnected = false;
-	}
+	 Sleep(300);
+	 staticImg = StaticImageMode;
+	 modeChanged = Commander -> SetDisplayMode(staticImg);*/
+
+	
 	  
 
 	// everthing went smoothly
 
 	return true;
- 
-	
-
-
-
-
-
-
- /* FILE *fp;
-  fp = fopen(imageLocation.c_str(), "rb");
-  
-  if(fp == NULL)
-  {
-      return -1;
-  }
-
-  fseek (fp , 0 , SEEK_END);
-  long  lSize = ftell (fp);
-  rewind (fp);
-
-  
-
-  uint8* imageBuffer = (uint8*) malloc (sizeof(uint8)*lSize);
-   int result = fread (imageBuffer,1,lSize,fp);
-   fclose(fp);*/
- //  // Check the image and make sure it is the right size
- // if( image.cols != GetWidth() || image.rows != GetHeight() )
- // {
-	//cout << "Incorrect image specified. Check size and channel count\n";
-	//return false;
- // }
-
- // //auto binaryImage = _Convert2BinaryImage( image );
- // auto byteCount = GetWidth() * GetHeight()*24 / 8;
-
-  
-  //connect
-   if(!IsConnected)
-      Commander ->Connect_LCR(LCR_Default_IP,LCR_Default_PORT);
-
-   
-
-
-   int size = 608*684*24; 
-
- 
-  /* if(!operation1)
-  {
-	  Commander ->Disconnect_LCR();
-	  return false;
-  }*/
-  
-   bool operation  = Commander ->LCR_LOAD_STATIC_IMAGE( image.data, size);
-
-   
- // DisplayMode staticImg = InternalTestPatter;
- // 
- // bool operation1;
- // operation1 = Commander -> SetDisplayMode(staticImg);
- //
- // /*if(!operation)
- // {
-	//  Commander ->Disconnect_LCR();
-	//  return false;
- // }*/
-
- // staticImg = StaticImageMode;
- // 
- // bool operation2;
- // operation2 = Commander -> SetDisplayMode(staticImg);
- ///*  if(!operation2)
- // {
-	//  Commander ->Disconnect_LCR();
-	//  return false;
- // }*/
- // 
- 
-
-  
-   //disconnect
-  bool disconnect = Commander ->Disconnect_LCR();
- 
-  if(!disconnect)
-  {
-	  return false;
-  }
-  IsConnected = false;
-  return true;
 }
 
 
