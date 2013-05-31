@@ -57,14 +57,9 @@ void LightCrafter::Disconnect()
 	}
 }
 
-
-bool LightCrafter::ProjectImage(cv::Mat image)
+bool LightCrafter::StaticDisplayMode()
 {
-    CvMat* imageStream =  BitmapCreator::CreateBitmapFromMat(image);
-
-	
-	  
-	DisplayMode staticImg = StaticImageMode;
+    DisplayMode staticImg = StaticImageMode;
 	bool modeChanged = Commander -> SetDisplayMode(staticImg);
 	
 	if(!modeChanged)
@@ -76,6 +71,13 @@ bool LightCrafter::ProjectImage(cv::Mat image)
 	  cout<<"Mode changed to Static Display.\n";
 
 	Sleep(300);
+}
+
+
+bool LightCrafter::ProjectImage(cv::Mat image)
+{
+    CvMat* imageStream =  BitmapCreator::CreateBitmapFromMat(image);
+
 
 	bool imageLoaded  = Commander ->LCR_LOAD_STATIC_IMAGE( imageStream->data.ptr, imageStream->step);
 
@@ -87,17 +89,7 @@ bool LightCrafter::ProjectImage(cv::Mat image)
 	else
 	  cout<<"Static Image Loaded.\n";
 
-	/* Sleep(300);
-	 staticImg = InternalTestPatter;
-	 modeChanged = Commander -> SetDisplayMode(staticImg);
-
-	 Sleep(300);
-	 staticImg = StaticImageMode;
-	 modeChanged = Commander -> SetDisplayMode(staticImg);*/
-
 	
-	  
-
 	// everthing went smoothly
 
 	return true;

@@ -61,19 +61,19 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 		
 		return false;
 	}
-	//Sleep(300);
+	Sleep(200);
 
-	//uint8* recieve = new uint8[8];
-	//tcpClient->TCP_Receive(connectedSocket,recieve,7);
-
-	// if(recieve[0]!=3)
-	//	int i =0;
-	//delete[]recieve;
+	uint8* recieve = new uint8[8];
+	tcpClient->TCP_Receive(connectedSocket,recieve,7);
+	  
+	 if(recieve[0]!=3)
+		int i =0;
+	delete[]recieve;
 
 	//-------------Intermediate Packets---------------------------------------------
 	flag = Intermediate; // change the flag to intermediate
 
-	int NumberOfIntermediatePackets = 18;
+	int NumberOfIntermediatePackets = 37;
 
 	for(int i = 0;i<NumberOfIntermediatePackets;i++)
 	{
@@ -87,15 +87,15 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 		cout <<"Static Image Load, the intermediate packet:"<<i<<"has a send error.\n";
 		return false;
 	  }
-	  //Sleep(300);
+	  Sleep(200);
 
-	 /* uint8* recieveI = new uint8[8];
+	  uint8* recieveI = new uint8[8];
 	  tcpClient->TCP_Receive(connectedSocket,recieveI,7);
 	  if(recieveI[0]!=3)
 		int i =0;
 
 
-	  delete[]recieveI;*/
+	  delete[]recieveI;
 	  
 	}
 
@@ -119,13 +119,13 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 	  return false;
 	}
 
-	/*uint8* recieveF = new uint8[8];
+	uint8* recieveF = new uint8[8];
 	tcpClient->TCP_Receive(connectedSocket,recieveF,7);
 
 	 if(recieveF[0]!=3)
 		int i =0;
 
-	delete[]recieveF;*/
+	delete[]recieveF;
 	
 
 	return true;

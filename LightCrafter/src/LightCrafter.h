@@ -34,7 +34,7 @@ public:
 
 	void Connect();
 	void Disconnect();
-
+	bool LightCrafter::StaticDisplayMode();
 	bool ProjectImage(cv::Mat image);
 
 	int LightCrafter::GetHeight(void);
