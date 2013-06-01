@@ -35,6 +35,57 @@ bool LCR_Commander:: Connect_LCR(string ipAddress, string port)
 
 }
 
+bool LCR_Commander::SendLCRWriteCommand(uint8* command, long packetSize, int packetNumber)
+{
+	if(connectedSocket<0)
+	{
+		cout << "No connected Socket.\n";
+		return false;
+	}
+
+	//send the  Packet
+	int send = tcpClient->TCP_Send(connectedSocket,command,packetSize);
+	
+	if(send ==SOCKET_ERROR)
+	{
+		if(packetNumber != -1)
+			cout <<"PACKET SEND, NUMBER:"<<packetNumber<<" with length:"<<packetSize<<" has recieved a socket error.\n";
+		else
+			cout <<"PACKET SEND, with length:"<<packetSize<<" has recieved a socket error.\n";
+		return false;
+	}
+
+
+	//-----------Recieve  Packet----------------------------
+	uint8 recieve[HEADER_SIZE];
+	int rec = tcpClient->TCP_Receive(connectedSocket,recieve,HEADER_SIZE);
+	if(rec ==SOCKET_ERROR)
+	{
+		if(packetNumber != -1)
+			cout <<"PACKET Recieve Header, NUMBER:"<<packetNumber<<" with length:"<<packetSize<<" has recieved a socket error.\n";
+		else
+			cout <<"PACKET Recieve Header, with length:"<<packetSize<<" has recieved a socket error.\n";
+		return false;
+	}
+
+	int payLoadLength = recieve[5]<<16+recieve[4];
+	int sizeToRecieve = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
+	
+	uint8* recievePayLoad = new uint8[sizeToRecieve];
+	int recPayload = tcpClient->TCP_Receive(connectedSocket,recievePayLoad,sizeToRecieve);
+	if(recPayload ==SOCKET_ERROR)
+	{
+		if(packetNumber != -1)
+			cout <<"PACKET Recieve PayLoad, NUMBER:"<<packetNumber<<" with length:"<<packetSize<<" has recieved a socket error.\n";
+		else
+			cout <<"PACKET Recieve PayLoad, with length:"<<packetSize<<" has recieved a socket error.\n";
+		return false;
+	}
+	delete[] recievePayLoad;
+
+}
+
+
 bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 {
 	if(connectedSocket < 0)
@@ -48,7 +99,7 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 	Command_Flags flag = Beginning; //flags
 
 
-	//-------------First Packet----------------------------------------------
+			//-------------First Packet----------------------------------------------
 	uint8* commandHeader = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, MAX_PAYLOAD_SIZE, image);
 
 	//send the first Packet
@@ -61,14 +112,35 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 		
 		return false;
 	}
-	Sleep(200);
 
-	uint8* recieve = new uint8[8];
-	tcpClient->TCP_Receive(connectedSocket,recieve,7);
-	  
-	 if(recieve[0]!=3)
-		int i =0;
-	delete[]recieve;
+
+	//-----------Recieve First Packet----------------------------
+	uint8 recieve[HEADER_SIZE];
+	int recF = tcpClient->TCP_Receive(connectedSocket,recieve,HEADER_SIZE);
+	if(recF ==SOCKET_ERROR)
+	{
+		cout <<"Static Image Load, First Packet Recieve error.\n";
+		return false;
+	}
+
+	int payLoadLength = recieve[5]<<16+recieve[4];
+	int sizeToRecieve = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
+	
+	uint8* recievePayLoad = new uint8[sizeToRecieve];
+	int recFP = tcpClient->TCP_Receive(connectedSocket,recievePayLoad,sizeToRecieve);
+	if(recFP ==SOCKET_ERROR)
+	{
+		delete[] recievePayLoad;
+		cout <<"Static Image Load, First Packet Recieve error.\n";
+		return false;
+	}
+	delete[] recievePayLoad;
+    
+
+	//analyize the payload
+
+	//blahblah not really need to do this
+	
 
 	//-------------Intermediate Packets---------------------------------------------
 	flag = Intermediate; // change the flag to intermediate
@@ -87,15 +159,34 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 		cout <<"Static Image Load, the intermediate packet:"<<i<<"has a send error.\n";
 		return false;
 	  }
-	  Sleep(200);
+	 
 
-	  uint8* recieveI = new uint8[8];
-	  tcpClient->TCP_Receive(connectedSocket,recieveI,7);
-	  if(recieveI[0]!=3)
-		int i =0;
+			//-----------Recieve Intermediate Packet Packet----------------------------
+	uint8 recieve[HEADER_SIZE];
+	int recF = tcpClient->TCP_Receive(connectedSocket,recieve,HEADER_SIZE);
+	if(recF ==SOCKET_ERROR)
+	{
+		cout <<"Static Image Load, Intermediate Packet:"<<i<< "Recieve error.\n";
+		return false;
+	}
 
+	int payLoadLength = recieve[5]<<16+recieve[4];
+	int sizeToRecieve = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
+	
+	uint8* recievePayLoad = new uint8[sizeToRecieve];
+	int recIP = tcpClient->TCP_Receive(connectedSocket,recievePayLoad,sizeToRecieve);
+	if(recIP ==SOCKET_ERROR)
+	{
+		delete[] recievePayLoad;
+		cout <<"Static Image Load, Intermediate Packet:"<<i<<"Recieve error.\n";
+		return false;
+	}
+	delete[] recievePayLoad;
+    
 
-	  delete[]recieveI;
+	//analyize the payload
+
+	//blahblah not really need to do this
 	  
 	}
 
@@ -109,7 +200,6 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 	uint8* commandFinal = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, remainingBytes, image+MAX_PAYLOAD_SIZE*NumberOfIntermediatePackets);
 
 	int finalSend = tcpClient->TCP_Send(connectedSocket,commandFinal,remainingBytes+HEADER_SIZE+CHECKSUM_SIZE); 
-	 //finalSend = tcpClient->TCP_Send(connectedSocket,commandFinal,remainingBytes+HEADER_SIZE+CHECKSUM_SIZE); 
 
 	delete[] commandFinal;
 
@@ -119,13 +209,26 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 	  return false;
 	}
 
-	uint8* recieveF = new uint8[8];
-	tcpClient->TCP_Receive(connectedSocket,recieveF,7);
+			//-----------Recieve Final Packet Packet----------------------------
+	/*uint8 recieveF[HEADER_SIZE];
+	int recF = tcpClient->TCP_Receive(connectedSocket,recieveF,HEADER_SIZE);
+	if(recF ==SOCKET_ERROR)
+	{
+		cout <<"Static Image Load, Final Packet Recieve error.\n";
+		return false;
+	}
 
-	 if(recieveF[0]!=3)
-		int i =0;
-
-	delete[]recieveF;
+	int payLoadLength = recieve[5]<<16+recieve[4];
+	int sizeToRecieve = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
+	
+	uint8* recievePayLoad = new uint8[sizeToRecieve];
+	int recIP = tcpClient->TCP_Receive(connectedSocket,recievePayLoad,sizeToRecieve);
+	if(recIP ==SOCKET_ERROR)
+	{
+		delete[] recievePayLoad;
+		cout <<"Static Image Load, Final Packet:Recieve error.\n";
+		return false;
+	}*/
 	
 
 	return true;

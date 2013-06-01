@@ -23,6 +23,9 @@ private:
 	Tcp * tcpClient;
 	int connectedSocket;
 	Command_Packetizer* packetizer;
+
+	bool LCR_Commander::SendLCRWriteCommand(uint8* command, long packetSize, int packetNumber = -1);
+
 public:
 	LCR_Commander(void);
 	~LCR_Commander(void);
