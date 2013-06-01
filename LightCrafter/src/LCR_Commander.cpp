@@ -103,44 +103,14 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 	uint8* commandHeader = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, MAX_PAYLOAD_SIZE, image);
 
 	//send the first Packet
-	int headerSend = tcpClient->TCP_Send(connectedSocket,commandHeader,MAX_PACKET_SIZE);
-	//delete[] commandHeader;
+	bool sendFirst = SendLCRWriteCommand(commandHeader,MAX_PACKET_SIZE,1);
+	
 	delete[] commandHeader;
-	if(headerSend ==SOCKET_ERROR)
-	{
-		cout <<"Static Image Load, First Packet send error.\n";
-		
-		return false;
-	}
-
-
-	//-----------Recieve First Packet----------------------------
-	uint8 recieve[HEADER_SIZE];
-	int recF = tcpClient->TCP_Receive(connectedSocket,recieve,HEADER_SIZE);
-	if(recF ==SOCKET_ERROR)
-	{
-		cout <<"Static Image Load, First Packet Recieve error.\n";
-		return false;
-	}
-
-	int payLoadLength = recieve[5]<<16+recieve[4];
-	int sizeToRecieve = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
 	
-	uint8* recievePayLoad = new uint8[sizeToRecieve];
-	int recFP = tcpClient->TCP_Receive(connectedSocket,recievePayLoad,sizeToRecieve);
-	if(recFP ==SOCKET_ERROR)
+	if(!sendFirst)
 	{
-		delete[] recievePayLoad;
-		cout <<"Static Image Load, First Packet Recieve error.\n";
 		return false;
 	}
-	delete[] recievePayLoad;
-    
-
-	//analyize the payload
-
-	//blahblah not really need to do this
-	
 
 	//-------------Intermediate Packets---------------------------------------------
 	flag = Intermediate; // change the flag to intermediate
@@ -151,42 +121,13 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 	{
 	  uint8* commandIntermediate = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, MAX_PAYLOAD_SIZE, image+(MAX_PAYLOAD_SIZE)*(i+1));
 
-	  int intermediateSend = tcpClient->TCP_Send(connectedSocket,commandIntermediate,MAX_PACKET_SIZE);
+      bool sendIntermdiate = SendLCRWriteCommand(commandIntermediate,MAX_PACKET_SIZE,i+1);
 	  delete[] commandIntermediate;
 
-	  if(intermediateSend == SOCKET_ERROR)
+	  if(!sendIntermdiate)
 	  {
-		cout <<"Static Image Load, the intermediate packet:"<<i<<"has a send error.\n";
-		return false;
+	     return false;
 	  }
-	 
-
-			//-----------Recieve Intermediate Packet Packet----------------------------
-	uint8 recieve[HEADER_SIZE];
-	int recF = tcpClient->TCP_Receive(connectedSocket,recieve,HEADER_SIZE);
-	if(recF ==SOCKET_ERROR)
-	{
-		cout <<"Static Image Load, Intermediate Packet:"<<i<< "Recieve error.\n";
-		return false;
-	}
-
-	int payLoadLength = recieve[5]<<16+recieve[4];
-	int sizeToRecieve = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
-	
-	uint8* recievePayLoad = new uint8[sizeToRecieve];
-	int recIP = tcpClient->TCP_Receive(connectedSocket,recievePayLoad,sizeToRecieve);
-	if(recIP ==SOCKET_ERROR)
-	{
-		delete[] recievePayLoad;
-		cout <<"Static Image Load, Intermediate Packet:"<<i<<"Recieve error.\n";
-		return false;
-	}
-	delete[] recievePayLoad;
-    
-
-	//analyize the payload
-
-	//blahblah not really need to do this
 	  
 	}
 
@@ -199,37 +140,13 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 
 	uint8* commandFinal = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, remainingBytes, image+MAX_PAYLOAD_SIZE*NumberOfIntermediatePackets);
 
-	int finalSend = tcpClient->TCP_Send(connectedSocket,commandFinal,remainingBytes+HEADER_SIZE+CHECKSUM_SIZE); 
+	 bool sendFinal = SendLCRWriteCommand(commandFinal,remainingBytes,NumberOfIntermediatePackets+2);
+	 
+	 if(!sendFinal)
+	  {
+	     return false;
+	  }
 
-	delete[] commandFinal;
-
-	if(finalSend == SOCKET_ERROR)
-	{
-	  cout <<"Static Image Load, Final Packet send error.\n";
-	  return false;
-	}
-
-			//-----------Recieve Final Packet Packet----------------------------
-	/*uint8 recieveF[HEADER_SIZE];
-	int recF = tcpClient->TCP_Receive(connectedSocket,recieveF,HEADER_SIZE);
-	if(recF ==SOCKET_ERROR)
-	{
-		cout <<"Static Image Load, Final Packet Recieve error.\n";
-		return false;
-	}
-
-	int payLoadLength = recieve[5]<<16+recieve[4];
-	int sizeToRecieve = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
-	
-	uint8* recievePayLoad = new uint8[sizeToRecieve];
-	int recIP = tcpClient->TCP_Receive(connectedSocket,recievePayLoad,sizeToRecieve);
-	if(recIP ==SOCKET_ERROR)
-	{
-		delete[] recievePayLoad;
-		cout <<"Static Image Load, Final Packet:Recieve error.\n";
-		return false;
-	}*/
-	
 
 	return true;
 }
