@@ -57,10 +57,9 @@ void LightCrafter::Disconnect()
 	}
 }
 
-bool LightCrafter::StaticDisplayMode()
+bool LightCrafter::StaticDisplayMode(DisplayMode displayMode)
 {
-    DisplayMode staticImg = StaticImageMode;
-	bool modeChanged = Commander -> SetDisplayMode(staticImg);
+	bool modeChanged = Commander -> SetDisplayMode(displayMode);
 	
 	if(!modeChanged)
 	{
@@ -69,8 +68,7 @@ bool LightCrafter::StaticDisplayMode()
 	}
 	else
 	  cout<<"Mode changed to Static Display.\n";
-
-	Sleep(300);
+	return true;
 }
 
 
@@ -89,7 +87,6 @@ bool LightCrafter::ProjectImage(cv::Mat image)
 	else
 	  cout<<"Static Image Loaded.\n";
 
-	
 	// everthing went smoothly
 
 	return true;

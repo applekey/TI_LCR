@@ -68,8 +68,8 @@ bool LCR_Commander::SendLCRWriteCommand(uint8* command, long packetSize, int pac
 		return false;
 	}
 
-	int payLoadLength = recieve[5]<<16+recieve[4];
-	int sizeToRecieve = HEADER_SIZE+payLoadLength+CHECKSUM_SIZE;
+	int payLoadLength = recieve[5]<<8+recieve[4];
+	int sizeToRecieve = payLoadLength+CHECKSUM_SIZE;
 	
 	uint8* recievePayLoad = new uint8[sizeToRecieve];
 	int recPayload = tcpClient->TCP_Receive(connectedSocket,recievePayLoad,sizeToRecieve);
@@ -82,6 +82,8 @@ bool LCR_Commander::SendLCRWriteCommand(uint8* command, long packetSize, int pac
 		return false;
 	}
 	delete[] recievePayLoad;
+
+	return true;
 
 }
 
@@ -140,7 +142,9 @@ bool LCR_Commander::LCR_LOAD_STATIC_IMAGE(uint8 * image,int byteCount)
 
 	uint8* commandFinal = packetizer->CreateCommand((uint8) pType, (uint16) cmdId, (uint8) flag, remainingBytes, image+MAX_PAYLOAD_SIZE*NumberOfIntermediatePackets);
 
-	 bool sendFinal = SendLCRWriteCommand(commandFinal,remainingBytes,NumberOfIntermediatePackets+2);
+	int lastLength = remainingBytes +HEADER_SIZE+CHECKSUM_SIZE;
+
+	 bool sendFinal = SendLCRWriteCommand(commandFinal,lastLength,NumberOfIntermediatePackets+2);
 	 
 	 if(!sendFinal)
 	  {
@@ -158,6 +162,7 @@ bool LCR_Commander::SetDisplayMode(DisplayMode displayMode)
       cout << "No connected Socket.\n";
 	  return false;
 	}
+
 
 	Packet_Type pType = Host_Write; // read command
 	CommandIds cmdId = CurrentDisplayMode; //commandId

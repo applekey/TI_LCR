@@ -7,6 +7,8 @@
 
 #define BITMAP_SIZE = 1247670;
 
+
+
 class BitmapCreator 
 {
 public:
